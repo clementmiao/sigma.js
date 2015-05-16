@@ -215,6 +215,9 @@ function updatePane (graph, filter) {
   // min degree
   _.$('min-degree').max = maxDegree;
   _.$('max-degree-value').textContent = String(maxDegree);
+
+  var nodeSliderElt = _.$('min-degree');
+  console.log(nodeSliderElt);
   
   // node category
   var nodecategoryElt = _.$('node-category');
@@ -257,17 +260,19 @@ sigma.parsers.json('data/egas_net.json', {
   updatePane(s.graph, filter);
 
   function applyMinDegreeFilter(e) {
-    console.log(e.target);
     var v = e.target.value;
-    var k = e.target[e.target.selectedIndex];
-    // console.log(k);
     _.$('min-degree-val').textContent = v;
+
+    // var v = e.target.value;
+    // var k = e.target[e.target.selectedIndex];
+    // console.log(k);
+    // _.$('min-degree-val').textContent = v;
 
     filter
       .undo('min-degree')
       .nodesBy(function(n) {
         // return this.degree(n.id) >= v;
-        return (parseFloat(n.quota_usage)).toFixed(1) * 100 === k.text;
+        return (parseFloat(n.quota_usage)).toFixed(1) * 100 >= parseInt(v);
       }, 'min-degree')
       .apply();
   }
